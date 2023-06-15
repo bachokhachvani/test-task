@@ -47,7 +47,6 @@ exports.getDogs = async (req, res, next) => {
       res.status(200).json(dog);
     }
     if (req.query) {
-      console.log("query", req.query);
       if (req.query.attribute && !req.query.pageNumber) {
         const dog = await Dog.findAll({
           order: [

@@ -47,7 +47,6 @@ app.use(errorMiddleware);
 
 const port = process.env.PORT || 3000;
 
-//testing
 app.get("/ping", (req, res) => {
   res.json({ message: "Dogshouseservice.Version1.0.1" });
 });
