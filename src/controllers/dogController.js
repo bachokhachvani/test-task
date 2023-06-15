@@ -2,18 +2,26 @@ const Dog = require("../models/dog.js");
 const createError = require("../utils/error.js");
 
 exports.addDog = async (req, res, next) => {
-  let info = {
-    name: req.body.name,
-    color: req.body.color,
-    tail_length: req.body.tail_length,
-    weight: req.body.weight,
-  };
   try {
+    let info = {
+      name: req.body.name,
+      color: req.body.color,
+      tail_length: req.body.tail_length,
+      weight: req.body.weight,
+    };
+    if (
+      !req.body.name ||
+      !req.body.color ||
+      !req.body.tail_length ||
+      !req.body.weight
+    ) {
+      return next(createError(400, "missing required parameters"));
+    }
     const dog = await Dog.create(info);
     res.status(200).send(dog);
   } catch (e) {
     // res.status(500).send(e);
-    next(createError(501, e.message));
+    next(e);
   }
 };
 
@@ -50,6 +58,7 @@ exports.getDogs = async (req, res, next) => {
             ],
           ],
         });
+
         res.status(200).json(dog);
       } else if (req.query.attribute && req.query.pageNumber) {
         const limit = parseFloat(

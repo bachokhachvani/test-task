@@ -10,19 +10,29 @@ const Dog = sequelize.define("dog", {
   },
   name: {
     type: DataTypes.STRING,
+    allowNull: false,
     unique: true,
+    validate: {
+      is: /^[A-Za-z]+$/,
+    },
   },
   color: {
     type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      not: /^[0-9]+$/,
+    },
   },
   tail_length: {
     type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
     validate: {
       min: 0,
     },
   },
   weight: {
     type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
     validate: {
       min: 0,
     },

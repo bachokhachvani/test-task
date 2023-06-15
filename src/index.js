@@ -4,6 +4,7 @@ const sequelize = require("./config/database");
 const initializeData = require("./config/initializeData");
 const timeout = require("connect-timeout");
 const errorMiddleware = require("./middlewares/errorMiddleware");
+require("dotenv").config();
 
 const app = express();
 
@@ -38,18 +39,18 @@ app.use("/", router);
 // app.get("/long-request", (req, res, next) => {
 //   setTimeout(() => {
 //     res.send("Long request completed");
-//   }, 50000 + 1000); // Timeout duration + additional time to exceed the timeout
+//   }, 50000 + 1000);
 // });
 
 //error handler middleware
 app.use(errorMiddleware);
 
+const port = process.env.PORT || 3000;
+
 //testing
 app.get("/ping", (req, res) => {
   res.json({ message: "Dogshouseservice.Version1.0.1" });
 });
-
-const port = 3000;
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
