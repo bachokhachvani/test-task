@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const sequelize = require("./config/database");
 const initializeData = require("./config/initializeData");
+const timeout = require("connect-timeout");
+const errorMiddleware = require("./middlewares/errorMiddleware");
 
 const app = express();
 
@@ -19,7 +21,10 @@ sequelize
     console.log("Error: ", e);
   });
 
+const TIMEOUT = "3s";
+
 //middlewares
+app.use(timeout(TIMEOUT));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -28,16 +33,16 @@ app.use(express.urlencoded({ extended: true }));
 const router = require("./routes/dogRouter");
 app.use("/", router);
 
-//error handler middleware
-app.use((err, req, res, next) => {
-  const errorStatus = err.status || 500;
-  const errorMessage = err.message || "Something went wrong!";
+//testing request timeout error
 
-  return res.status(errorStatus).json({
-    status: errorStatus,
-    message: errorMessage,
-  });
-});
+// app.get("/long-request", (req, res, next) => {
+//   setTimeout(() => {
+//     res.send("Long request completed");
+//   }, 50000 + 1000); // Timeout duration + additional time to exceed the timeout
+// });
+
+//error handler middleware
+app.use(errorMiddleware);
 
 //testing
 app.get("/ping", (req, res) => {
