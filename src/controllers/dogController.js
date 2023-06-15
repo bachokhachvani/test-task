@@ -17,6 +17,9 @@ exports.addDog = async (req, res, next) => {
     ) {
       return next(createError(400, "missing required parameters"));
     }
+    if (isNaN(req.body.tail_length) || isNaN(req.body.weight)) {
+      return next(createError(400, "weigth and tail params should be numbers"));
+    }
     const dog = await Dog.create(info);
     res.status(200).send(dog);
   } catch (e) {
